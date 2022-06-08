@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:minhtu/controller/batch_detail/batch_detail_controller.dart';
 import 'package:minhtu/routes/routes.dart';
 import 'package:minhtu/widgets/app_bar_widget.dart';
+import 'package:minhtu/widgets/loading_widget.dart';
 
 class BatchDetailPage extends GetWidget<BatchDetailController> {
   const BatchDetailPage({Key? key}) : super(key: key);
@@ -17,61 +18,66 @@ class BatchDetailPage extends GetWidget<BatchDetailController> {
           children: [
             const AppBarWidget("Lô sản phẩm"),
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(left: 28, right: 28, top: 26),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    detailView(),
-                    const SizedBox(
-                      height: 30,
-                    ),
-                    const Text(
-                      "Hành trình sản phẩm",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 20,
+              child: controller.isLoading
+                  ? const LoadingWidget()
+                  : Padding(
+                      padding:
+                          const EdgeInsets.only(left: 28, right: 28, top: 26),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          detailView(),
+                          const SizedBox(
+                            height: 30,
+                          ),
+                          const Text(
+                            "Hành trình sản phẩm",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 20,
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 26,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const Text("Giao dịch"),
+                              buttonAdd(),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          Expanded(
+                            child: ListView.separated(
+                              physics: const BouncingScrollPhysics(),
+                              padding:
+                                  const EdgeInsets.only(top: 20, bottom: 10),
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(
+                                height: 10,
+                              ),
+                              itemBuilder: (context, index) => transactionItem(
+                                name: "Giao dịch ${index + 1}",
+                                des: controller.batchDetailModel
+                                    ?.culTransaction![index].transDescription,
+                                time: controller.batchDetailModel
+                                    ?.culTransaction![index].transDate,
+                                typeTrans: controller.batchDetailModel
+                                    ?.culTransaction![index].transType,
+                                weight:
+                                    "${controller.batchDetailModel?.culTransaction![index].transQuantity?.toString()} ${controller.batchDetailModel?.culTransaction![index].transUom?.toString()}",
+                              ),
+                              itemCount: controller.batchDetailModel
+                                      ?.culTransaction?.length ??
+                                  0,
+                            ),
+                          )
+                        ],
                       ),
                     ),
-                    const SizedBox(
-                      height: 26,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text("Giao dịch"),
-                        buttonAdd(),
-                      ],
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Expanded(
-                      child: ListView.separated(
-                        physics: const BouncingScrollPhysics(),
-                        padding: const EdgeInsets.only(top: 20, bottom: 10),
-                        separatorBuilder: (context, index) => const SizedBox(
-                          height: 10,
-                        ),
-                        itemBuilder: (context, index) => transactionItem(
-                          name: "Giao dịch ${index + 1}",
-                          des: controller.batchDetailModel
-                              ?.culTransaction![index].transDescription,
-                          time: controller.batchDetailModel
-                              ?.culTransaction![index].transDate,
-                          typeTrans: controller.batchDetailModel
-                              ?.culTransaction![index].transType,
-                          weight:
-                              "${controller.batchDetailModel?.culTransaction![index].transQuantity?.toString()} ${controller.batchDetailModel?.culTransaction![index].transUom?.toString()}",
-                        ),
-                        itemCount: controller
-                                .batchDetailModel?.culTransaction?.length ??
-                            0,
-                      ),
-                    )
-                  ],
-                ),
-              ),
             )
           ],
         ),

@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:minhtu/controller/batch_detail/batch_detail_controller.dart';
 import 'package:minhtu/models/batch_detail/batch_detail_model.dart';
 import 'package:minhtu/repositories/batch_repository.dart';
+import 'package:minhtu/widgets/loading_widget.dart';
 
 class AddTransactionController extends GetxController {
   BatchRepository repository = BatchRepository();
@@ -40,6 +41,7 @@ class AddTransactionController extends GetxController {
     }
     update();
     if (warningWeight.isEmpty) {
+      Get.dialog(const LoadingWidget());
       BatchDetailModel? batchDetailModel = await repository.createTransaction(
         cultivation: "FTQWW001079733XJ",
         transDate: DateFormat("yyyy-MM-dd").format(selectedDate!),
@@ -48,6 +50,7 @@ class AddTransactionController extends GetxController {
         transType: selectedType!,
         transUom: batchDetailController.batchDetailModel!.culHarvestUom!.trim(),
       );
+      Get.back();
       batchDetailController.batchDetailModel = batchDetailModel;
       batchDetailController.update();
       Get.back();
