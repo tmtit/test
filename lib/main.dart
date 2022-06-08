@@ -1,11 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:minhtu/bindings/auth/login_binding.dart';
+import 'package:minhtu/controller/auth/animation_login_controller.dart';
 import 'package:minhtu/controller/auth/auth_controller.dart';
-import 'package:minhtu/models/auth/animation_login_controller.dart';
 import 'package:minhtu/routes/pages.dart';
 import 'package:minhtu/routes/routes.dart';
 import 'package:minhtu/setting/theme.dart';

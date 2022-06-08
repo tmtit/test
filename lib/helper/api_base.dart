@@ -1,30 +1,33 @@
 // ignore_for_file: avoid_print
 
-import 'package:get/get.dart';
+import 'dart:io';
+
+import 'package:dio/adapter.dart';
+import 'package:dio/dio.dart';
+import 'package:get/get.dart' hide Response;
 import 'package:minhtu/controller/auth/auth_controller.dart';
 import 'package:minhtu/helper/storage_helper.dart';
 import 'package:minhtu/routes/routes.dart';
 import 'package:minhtu/utils/urls.dart';
 
-class ApiBaseHelper extends GetConnect {
+class ApiBaseHelper {
+  ApiBaseHelper() {
+    (dio.httpClientAdapter as DefaultHttpClientAdapter).onHttpClientCreate =
+        (HttpClient client) {
+      client.badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+      return null;
+    };
+  }
+
   static AuthController authController = Get.find();
+  Dio dio = Dio();
 
   static Map<String, String> getDefaultHeader() {
     return {
       'Content-type': 'application/json;charset=UTF-8',
       'Accept': 'application/json',
-      'Authorization': authController.authModel?.idToken != null
-          ? "Bearer ${authController.authModel?.idToken}"
-          : "",
-    };
-  }
-
-  static Map<String, String> getFromDataDefaultHeader() {
-    return {
-      'Content-type': 'multipart/form-data;charset=UTF-8',
-      'Authorization': authController.authModel?.idToken != null
-          ? "Bearer ${authController.authModel?.idToken}"
-          : "",
+      if (authController.cookie != null) 'Cookie': authController.cookie!,
     };
   }
 
@@ -32,9 +35,7 @@ class ApiBaseHelper extends GetConnect {
     return {
       'Content-type': 'application/json;charset=UTF-8',
       'Accept': 'application/json',
-      'Authorization': authController.authModel?.idToken != null
-          ? "Bearer ${authController.authModel?.idToken}"
-          : "",
+      if (authController.cookie != null) 'Cookie': authController.cookie!,
     };
   }
 
@@ -43,16 +44,13 @@ class ApiBaseHelper extends GetConnect {
     Map<String, dynamic>? params,
     required String url,
   }) async {
-    print(UrlUtils.urlConnect(url));
-    print(params);
-    print(getDefaultHeader().toString());
     return performRequest(
       (Map<String, String> refreshedHeaders) {
-        return get(
-          UrlUtils.urlConnect(url),
-          headers: headers ?? getDefaultHeader(),
-          query: params ?? {},
-        );
+        return dio.get(
+            "https://rpc.freshdi.com/api/method/freshdi.data.test.batch.get_batch_detail",
+            queryParameters: params,
+            options:
+                Options(method: "GET", headers: headers ?? getDefaultHeader()));
       },
       headers: headers ?? getDefaultHeader(),
     );
@@ -70,57 +68,11 @@ class ApiBaseHelper extends GetConnect {
     print(getDefaultHeader().toString());
     return performRequest(
       (Map<String, String> refreshedHeaders) {
-        return post(
-          UrlUtils.urlConnect(url),
-          body ?? {},
-          headers: headers ?? getDefaultHeader(),
-          query: params ?? {},
-        );
-      },
-      headers: headers ?? getDefaultHeader(),
-    );
-  }
-
-  Future<Response?> postFormData({
-    List<int>? image,
-    required String url,
-    Map<String, String>? headers,
-  }) async {
-    print(UrlUtils.urlConnect(url));
-    print(getDefaultHeader().toString());
-    final form = FormData({
-      if (image != null) 'file': MultipartFile(image, filename: 'avatar.png'),
-      'otherFile': MultipartFile(image, filename: 'cover.png'),
-    });
-    return performRequest(
-      (Map<String, String> refreshedHeaders) {
-        return request(
-          UrlUtils.urlConnect(url),
-          "GET",
-          headers: headers ?? getDefaultHeader(),
-        );
-      },
-      headers: headers ?? getDefaultHeader(),
-    );
-  }
-
-  Future<Response?> putData({
-    required String url,
-    dynamic body,
-    Map<String, String>? headers,
-    Map<String, dynamic>? params,
-  }) async {
-    print(UrlUtils.urlConnect(url));
-    print("body:" + body.toString());
-    print(getDefaultHeader().toString());
-    return performRequest(
-      (Map<String, String> refreshedHeaders) {
-        return put(
-          UrlUtils.urlConnect(url),
-          body ?? {},
-          headers: headers ?? getDefaultHeader(),
-          query: params ?? {},
-        );
+        return dio.post(UrlUtils.urlConnect(url),
+            queryParameters: params ?? {},
+            data: body ?? {},
+            options: Options(
+                method: "POST", headers: headers ?? getDefaultHeader()));
       },
       headers: headers ?? getDefaultHeader(),
     );

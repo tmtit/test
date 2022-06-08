@@ -1,27 +1,26 @@
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:minhtu/helper/storage_helper.dart';
-import 'package:minhtu/models/auth/login_model.dart';
 
 class AuthController extends GetxController {
-  AuthModel? authModel;
+  String? cookie;
   bool isLogin = false;
-  void setAuth(AuthModel authModel) {
-    this.authModel = authModel;
+  void setAuth(String cookie) {
+    this.cookie = cookie;
     update();
   }
 
-  void setAuthLocal(AuthModel authModel) {
-    this.authModel = authModel;
+  void setAuthLocal(String cookie) {
+    this.cookie = cookie;
     StorageHelper.setAuth(
-      authModel: authModel,
+      cookie: cookie,
     );
     update();
   }
 
   void checkAuth() async {
-    authModel = await StorageHelper.getAuth();
-    if (authModel != null) {
+    cookie = await StorageHelper.getAuth();
+    if (cookie != null) {
       isLogin = true;
     } else {
       isLogin = false;
@@ -36,6 +35,6 @@ class AuthController extends GetxController {
   }
 
   void resetVariable() {
-    authModel = null;
+    cookie = null;
   }
 }

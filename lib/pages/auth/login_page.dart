@@ -2,7 +2,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:minhtu/controller/auth/login_controller.dart';
-import 'package:minhtu/routes/routes.dart';
 import 'package:minhtu/utils/colors.dart';
 import 'package:minhtu/utils/icons.dart';
 import 'package:minhtu/utils/strings.dart';
@@ -109,7 +108,7 @@ class LoginPage extends StatelessWidget {
                                                 StringUtils.remember_me.tr,
                                                 style: const TextStyle(
                                                     fontSize: 12,
-                                                    color: Color(0xFF77828F),
+                                                    color: ColorUtils.primary,
                                                     fontWeight:
                                                         FontWeight.w500),
                                               ),
@@ -163,8 +162,9 @@ class LoginPage extends StatelessWidget {
                                                     recognizer:
                                                         TapGestureRecognizer()
                                                           ..onTap = () {
-                                                            Get.toNamed(Routes
-                                                                .SIGNUP_PAGE);
+                                                            Get.snackbar(
+                                                                "Đang phát triển",
+                                                                "Tính năng đang phát triển");
                                                           }),
                                               ]),
                                         ),
@@ -193,12 +193,7 @@ class LoginPage extends StatelessWidget {
                         scale: controller.tagOnScaleAnimation!.value,
                         child: Opacity(
                           opacity: controller.tagOnFadeAnimation!.value,
-                          child: Container(),
-                          // SvgPicture.asset(
-                          //   IconUtils.icLogo,
-                          //   height: 41,
-                          //   color: controller.tagOnColorAnimation!.value,
-                          // ),
+                          child: Image.asset("assets/images/logo.png"),
                         ),
                       ),
                     );
@@ -214,7 +209,7 @@ class LoginPage extends StatelessWidget {
     return TextFieldWidget(
       title: StringUtils.username.tr,
       controller: _loginController.usernameController,
-      hintText: "deniel123@gmail.com",
+      hintText: "0123456789",
       isRequired: true,
       validator: _loginController.validateUserName,
     );

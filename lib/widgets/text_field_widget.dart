@@ -32,7 +32,7 @@ class TextFieldWidget extends StatelessWidget {
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
-                color: Color(0xFF77828F),
+                color: ColorUtils.primary,
               ),
             ),
             const SizedBox(

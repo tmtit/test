@@ -2,11 +2,12 @@
 
 class UrlUtils {
   static String PROTOCOL = "https://";
-  static String DOMAIN = "test.tagon.ai";
-  static String API_LOGIN = "/api/authenticate";
-  static String API_REGISTER = "/api/register";
-  static String API_GET_USER= "/api/users/get-user-profile";
-  static String Api_Get_Project ="/api/projects/current-user-projects";
+  static String DOMAIN = "rpc.freshdi.com";
+  static String API_LOGIN = "/api/method/freshdi.data.farm_company.login";
+  static String API_GET_BATCH_DETAIL =
+      "/api/method/freshdi.data.test.batch.get_batch_detail";
+  static String API_POST_TRANS =
+      "/api/method/freshdi.data.test.batch_trans.post_batch_trans";
 
   static String urlConnect(String pathUrl) {
     return "$PROTOCOL$DOMAIN$pathUrl";

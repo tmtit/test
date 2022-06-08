@@ -1,8 +1,6 @@
-
 import 'package:get/get.dart';
 import 'package:minhtu/controller/auth/auth_controller.dart';
 import 'package:minhtu/helper/api_base.dart';
-import 'package:minhtu/models/auth/login_model.dart';
 import 'package:minhtu/utils/urls.dart';
 
 class AuthRepository {
@@ -18,24 +16,26 @@ class AuthRepository {
     final result = await ApiBaseHelper().postData(
       url: UrlUtils.API_LOGIN,
       body: {
-        "username": username.trim(),
-        "password": password.trim(),
-        "rememberMe": rememberMe,
+        "usr": username.trim(),
+        "pwd": password.trim(),
       },
     );
     if (result != null && result.statusCode == 200) {
-      AuthModel authModel = AuthModel.fromJson(
-        result.body,
-      );
+      List<String>? listCookie = result.headers['set-cookie'];
+      String cookie = listCookie!
+          .map((element) {
+            return element.split(";").first;
+          })
+          .toList()
+          .join(";");
       if (rememberMe) {
-        authController.setAuthLocal(authModel);
+        authController.setAuthLocal(cookie);
       } else {
-        authController.setAuth(authModel);
+        authController.setAuth(cookie);
       }
       return true;
     } else {
       return false;
     }
   }
-
 }

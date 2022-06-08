@@ -1,26 +1,23 @@
 // ignore_for_file: constant_identifier_names
 
-import 'dart:convert';
-
 import 'package:get_storage/get_storage.dart';
-import 'package:minhtu/models/auth/login_model.dart';
 
 class StorageHelper {
   static GetStorage box = GetStorage();
 
   static const String KEY_AUTH = "auth";
 
-  static Future<void> setAuth({AuthModel? authModel}) async {
+  static Future<void> setAuth({String? cookie}) async {
     await box.write(
       KEY_AUTH,
-      jsonEncode(authModel),
+      cookie,
     );
   }
 
-  static Future<AuthModel?> getAuth() async {
+  static Future<String?> getAuth() async {
     if (box.read(KEY_AUTH) != null) {
       String authEncode = await box.read(KEY_AUTH);
-      return AuthModel.fromJson(jsonDecode(authEncode));
+      return authEncode;
     }
     return null;
   }
