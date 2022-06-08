@@ -232,7 +232,7 @@ class AddTransactionPage extends GetWidget<AddTransactionController> {
         ),
         Row(
           children: [
-            Spacer(
+            const Spacer(
               flex: 4,
             ),
             Expanded(
@@ -242,13 +242,13 @@ class AddTransactionPage extends GetWidget<AddTransactionController> {
                     controller.warningWeight.isNotEmpty
                         ? Text(
                             controller.warningWeight,
-                            style: TextStyle(
+                            style: const TextStyle(
                                 fontSize: 9,
                                 fontWeight: FontWeight.w400,
                                 fontStyle: FontStyle.italic,
                                 color: ColorUtils.errorColor),
                           )
-                        : SizedBox(),
+                        : const SizedBox(),
               ),
             ),
           ],
@@ -274,7 +274,7 @@ class AddTransactionPage extends GetWidget<AddTransactionController> {
               ),
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 4,
           ),
           Container(
@@ -337,8 +337,8 @@ class AddTransactionPage extends GetWidget<AddTransactionController> {
               end: Alignment.topRight),
           borderRadius: BorderRadius.circular(5),
         ),
-        child: Center(
-          child: const Text(
+        child: const Center(
+          child: Text(
             "Lưu",
             style: TextStyle(
                 color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500),
@@ -356,7 +356,7 @@ class AddTransactionPage extends GetWidget<AddTransactionController> {
         timeView(),
         weightView(),
         descriptionView(),
-        SizedBox(
+        const SizedBox(
           height: 28,
         ),
       ],

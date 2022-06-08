@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:minhtu/controller/batch_detail/batch_detail_controller.dart';
 import 'package:minhtu/routes/routes.dart';
@@ -47,6 +48,7 @@ class BatchDetailPage extends GetWidget<BatchDetailController> {
                     ),
                     Expanded(
                       child: ListView.separated(
+                        physics: const BouncingScrollPhysics(),
                         padding: const EdgeInsets.only(top: 20, bottom: 10),
                         separatorBuilder: (context, index) => const SizedBox(
                           height: 10,
@@ -130,7 +132,13 @@ class BatchDetailPage extends GetWidget<BatchDetailController> {
     );
   }
 
-  rowTitle(String title, {String? valueOne, String? valueTwo}) {
+  rowTitle(
+    String title, {
+    String? valueOne,
+    String? valueTwo,
+    bool arrowOneDropDown = false,
+    bool arrowTwoDropDown = false,
+  }) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: Row(
@@ -153,23 +161,43 @@ class BatchDetailPage extends GetWidget<BatchDetailController> {
                   valueOne != null
                       ? Expanded(
                           child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 4, horizontal: 12),
+                            padding: const EdgeInsets.only(
+                                bottom: 4, top: 4, left: 12, right: 8),
                             decoration: BoxDecoration(
                               border: Border.all(
-                                color: const Color(0xffDBDBDB),
+                                color: arrowOneDropDown
+                                    ? const Color(0xffC5DDFF)
+                                    : const Color(0xffDBDBDB),
                                 style: BorderStyle.solid,
-                                width: 0.5,
+                                width: arrowOneDropDown ? 1 : 0.5,
                               ),
                               borderRadius: BorderRadius.circular(5),
                             ),
-                            child: Text(
-                              valueOne,
-                              style: const TextStyle(
-                                color: Color(0xff3D3D3D),
-                                fontSize: 11,
-                                fontWeight: FontWeight.w400,
-                              ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    valueOne,
+                                    style: const TextStyle(
+                                      color: Color(0xff3D3D3D),
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 2,
+                                ),
+                                if (arrowOneDropDown)
+                                  SizedBox(
+                                    width: 11,
+                                    height: 6,
+                                    child: SvgPicture.asset(
+                                      "assets/svg/arrow_down.svg",
+                                      color: const Color(0xff979797),
+                                    ),
+                                  ),
+                              ],
                             ),
                           ),
                         )
@@ -180,23 +208,43 @@ class BatchDetailPage extends GetWidget<BatchDetailController> {
                   valueTwo != null
                       ? Expanded(
                           child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 4, horizontal: 12),
+                            padding: const EdgeInsets.only(
+                                bottom: 4, top: 4, left: 12, right: 8),
                             decoration: BoxDecoration(
                               border: Border.all(
-                                color: const Color(0xffDBDBDB),
+                                color: arrowTwoDropDown
+                                    ? const Color(0xffC5DDFF)
+                                    : const Color(0xffDBDBDB),
                                 style: BorderStyle.solid,
-                                width: 0.5,
+                                width: arrowTwoDropDown ? 1 : 0.5,
                               ),
                               borderRadius: BorderRadius.circular(5),
                             ),
-                            child: Text(
-                              valueTwo,
-                              style: const TextStyle(
-                                color: Color(0xff3D3D3D),
-                                fontSize: 11,
-                                fontWeight: FontWeight.w400,
-                              ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    valueTwo,
+                                    style: const TextStyle(
+                                      color: Color(0xff3D3D3D),
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 2,
+                                ),
+                                if (arrowTwoDropDown)
+                                  SizedBox(
+                                    width: 11,
+                                    height: 6,
+                                    child: SvgPicture.asset(
+                                      "assets/svg/arrow_down.svg",
+                                      color: const Color(0xff979797),
+                                    ),
+                                  ),
+                              ],
                             ),
                           ),
                         )
@@ -229,11 +277,18 @@ class BatchDetailPage extends GetWidget<BatchDetailController> {
         rowTitle("Loại giống", valueOne: controller.batchDetailModel?.culSeed),
         rowTitle("Địa điểm sản xuất",
             valueOne: controller.batchDetailModel?.culSubfarm),
-        rowTitle("Tiêu chuẩn", valueOne: controller.batchDetailModel?.culCert),
-        rowTitle("Khối lượng",
-            valueOne:
-                controller.batchDetailModel?.culHarvestSize?.toString() ?? "",
-            valueTwo: controller.batchDetailModel?.culHarvestUom ?? ""),
+        rowTitle(
+          "Tiêu chuẩn",
+          valueOne: controller.batchDetailModel?.culCert,
+          arrowOneDropDown: true,
+        ),
+        rowTitle(
+          "Khối lượng",
+          valueOne:
+              controller.batchDetailModel?.culHarvestSize?.toString() ?? "",
+          valueTwo: controller.batchDetailModel?.culHarvestUom ?? "",
+          arrowTwoDropDown: true,
+        ),
         rowTitle("NSX - HSD",
             valueOne:
                 "${controller.batchDetailModel?.culHarvestStartDate} - ${controller.batchDetailModel?.culHarvestEndDate}"),

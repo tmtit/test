@@ -15,17 +15,6 @@ class AddTransactionController extends GetxController {
   DateTime? selectedDate = DateTime.now();
   BatchDetailController batchDetailController = Get.find();
 
-  @override
-  void onInit() {
-    super.onInit();
-    // focusNodeWeight.addListener(() {
-    //   if (!focusNodeWeight.hasFocus) {
-    //
-    //     update();
-    //   }
-    // });
-  }
-
   chooseDate() async {
     selectedDate = await showDatePicker(
         context: Get.context!,
